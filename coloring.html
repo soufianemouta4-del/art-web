@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كتب التلوين - إبداع بلا حدود 🎨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --boys: #1d6be4;
+            --boys-light: #e8f0fe;
+            --boys-dark: #1450b0;
+            --girls: #e91e8c;
+            --girls-light: #fce4f3;
+            --girls-dark: #b5006e;
+            --gold: #f59e0b;
+            --gold-light: #fef3c7;
+            --red: #ef4444;
+            --green: #22c55e;
+            --dark: #1a1a2e;
+            --text: #2d2d2d;
+            --muted: #6b7280;
+            --white: #ffffff;
+            --radius: 18px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Cairo', 'Tajawal', sans-serif;
+            background: #f8f9ff;
+            color: var(--text);
+            overflow-x: hidden;
+            padding-bottom: 90px;
+        }
+
+        /* ============ ANNOUNCEMENT BAR ============ */
+        #announcement-bar {
+            background: linear-gradient(90deg, #ef4444, #f97316, #ef4444);
+            background-size: 200% auto;
+            animation: gradientShift 3s linear infinite;
+            color: white;
+            text-align: center;
+            padding: 12px 16px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 12px rgba(239,68,68,0.35);
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .timer-box {
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            padding: 4px 14px;
+            font-size: 1.15rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        /* ============ HERO ============ */
+        .hero {
+            background: linear-gradient(135deg, #1d6be4 0%, #e91e8c 100%);
+            padding: 48px 20px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.4);
+            color: white;
+            border-radius: 50px;
+            padding: 6px 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: clamp(1.8rem, 6vw, 3rem);
+            font-weight: 900;
+            color: white;
+            line-height: 1.3;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.2);
+            margin-bottom: 12px;
+        }
+
+        .hero-sub {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.05rem;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        /* ============ SECTION STYLES ============ */
+        .section { padding: 48px 20px; max-width: 900px; margin: 0 auto; }
+
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .section-sub {
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.95rem;
+            margin-bottom: 32px;
+        }
+
+        /* ============ PRICING CARDS ============ */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .pricing-grid { grid-template-columns: 1fr; }
+        }
+
+        .price-card {
+            border-radius: var(--radius);
+            padding: 28px 20px;
+            border: 2px solid transparent;
+            background: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            position: relative;
+            text-align: center;
+        }
+
+        .price-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.12); }
+
+        .price-card.featured {
+            border-color: var(--gold);
+            background: linear-gradient(135deg, #fffbeb, #fef3c7);
+            transform: scale(1.03);
+            box-shadow: 0 12px 40px rgba(245,158,11,0.25);
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+            color: white;
+            border-radius: 50px;
+            padding: 5px 16px;
+            font-size: 0.78rem;
+            font-weight: 900;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(245,158,11,0.4);
+        }
+
+        .price-icon { font-size: 2.5rem; margin-bottom: 8px; }
+        .price-name { font-size: 1.1rem; font-weight: 900; color: var(--dark); margin-bottom: 4px; }
+        .price-amount { font-size: 2rem; font-weight: 900; color: var(--boys); margin: 10px 0; }
+        .price-amount.gold { color: #d97706; }
+        .price-old { text-decoration: line-through; color: var(--muted); font-size: 0.9rem; }
+        .price-features { list-style: none; margin-top: 14px; }
+        .price-features li { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.88rem; color: var(--muted); margin-bottom: 6px; font-weight: 600; }
+        .price-features li .check { color: var(--green); font-size: 1rem; }
+
+        /* ============ ORDER FORM ============ */
+        .order-section {
+            background: white;
+            border-radius: 24px;
+            padding: 36px 24px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+            border: 2px solid #e5e7eb;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 6px;
+        }
+
+        .form-input {
+            width: 100%;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 13px 16px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text);
+            margin-bottom: 16px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+            background: #f9fafb;
+        }
+
+        .form-input:focus { border-color: var(--boys); box-shadow: 0 0 0 3px rgba(29,107,228,0.12); background: white; }
+        .form-input.error { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.12); background: #fff5f5; }
+
+        .offer-select-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .offer-radio-card {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 14px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #f9fafb;
+        }
+
+        .offer-radio-card.active { border-color: var(--boys); background: var(--boys-light); }
+        .offer-radio-card.active.gold-offer { border-color: var(--gold); background: var(--gold-light); }
+        .offer-radio-label { font-size: 0.8rem; font-weight: 700; color: var(--dark); }
+        .offer-radio-price { font-size: 1.15rem; font-weight: 900; color: var(--boys); margin-top: 4px; }
+        .offer-radio-price.gold { color: #d97706; }
+
+        .inline-alert {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            animation: bounceIn 0.4s cubic-bezier(0.36,0.07,0.19,0.97);
+        }
+
+        .inline-alert.visible { display: flex; }
+
+        .inline-alert.alert-offer {
+            background: linear-gradient(135deg, #fff0f0, #ffe4e4);
+            border: 2px solid #ef4444;
+            color: #b91c1c;
+            box-shadow: 0 4px 16px rgba(239,68,68,0.18);
+        }
+
+        .inline-alert.alert-fields {
+            background: linear-gradient(135deg, #fff7ed, #ffedd5);
+            border: 2px solid #f97316;
+            color: #c2410c;
+            box-shadow: 0 4px 16px rgba(249,115,22,0.18);
+        }
+
+        .inline-alert .alert-icon {
+            font-size: 1.4rem;
+            flex-shrink: 0;
+            animation: pulse-icon 1s ease infinite;
+        }
+
+        .inline-alert .alert-text { flex: 1; line-height: 1.5; }
+        .inline-alert .alert-text strong { display: block; font-size: 0.95rem; margin-bottom: 2px; }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.92) translateY(-8px); }
+            60% { opacity: 1; transform: scale(1.02) translateY(2px); }
+            100% { transform: scale(1) translateY(0); }
+        }
+
+        @keyframes pulse-icon {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .offer-radio-card.highlight-error {
+            border-color: #ef4444 !important;
+            background: #fff5f5 !important;
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(6px); }
+            60% { transform: translateX(-4px); }
+            80% { transform: translateX(4px); }
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 18px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 900;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 6px 20px rgba(37,211,102,0.35);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(37,211,102,0.45); }
+
+        /* ============ SUB CHOICE ============ */
+        .sub-choice { 
+            display: none; 
+            flex-direction: column; 
+            margin-top: 16px; 
+            margin-bottom: 8px; 
+        }
+        .sub-choice.visible { display: flex; }
+
+        .sub-btn {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 14px 10px;
+            background: white;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text);
+            flex: 1;
+        }
+
+        .sub-btn.boys.chosen {
+            background: var(--boys);
+            color: white;
+            box-shadow: 0 4px 14px rgba(29,107,228,0.4);
+            transform: scale(1.04);
+        }
+
+        .sub-btn.girls.chosen {
+            background: var(--girls);
+            color: white;
+            box-shadow: 0 4px 14px rgba(233,30,140,0.4);
+            transform: scale(1.04);
+        }
+
+        .sub-alert {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            background: #fff3cd;
+            border: 2px solid #f59e0b;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #92400e;
+            margin-top: 8px;
+            margin-bottom: 12px;
+            animation: shake 0.4s ease;
+        }
+
+        .sub-alert.visible { display: flex; }
+
+        /* ============ SINGLE BOOK SELECTION ============ */
+        #single-book-row { display: none; margin-bottom: 16px; }
+        #single-book-row.visible { display: block; }
+
+        .book-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .book-chip {
+            border: 2px solid #e5e7eb;
+            border-radius: 50px;
+            padding: 7px 14px;
+            background: white;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text);
+        }
+
+        .book-chip.selected-boys { border-color: var(--boys); background: var(--boys); color: white; }
+        .book-chip.selected-girls { border-color: var(--girls); background: var(--girls); color: white; }
+
+        /* ============ REVIEWS ============ */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 14px;
+        }
+
+        .review-card {
+            background: white;
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            border: 1px solid #f0f0f0;
+        }
+
+        .review-stars { color: #f59e0b; font-size: 1.1rem; margin-bottom: 8px; }
+        .review-text { font-size: 0.88rem; color: var(--text); margin-bottom: 10px; line-height: 1.6; font-weight: 500; }
+        .review-author { font-size: 0.8rem; color: var(--muted); font-weight: 700; }
+
+        /* ============ TRUST BADGES ============ */
+        .trust-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            border-radius: 50px;
+            padding: 10px 18px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+            color: var(--dark);
+        }
+
+        /* ============ FLOATING WHATSAPP ============ */
+        #float-wa {
+            position: fixed;
+            bottom: 90px;
+            left: 24px;
+            z-index: 999;
+            width: 60px;
+            height: 60px;
+            background: #25d366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(37,211,102,0.5);
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s;
+            animation: wobble 4s infinite;
+        }
+
+        #float-wa:hover { transform: scale(1.12); }
+
+        @keyframes wobble {
+            0%, 80%, 100% { transform: rotate(0deg); }
+            85% { transform: rotate(-15deg); }
+            90% { transform: rotate(15deg); }
+            95% { transform: rotate(-8deg); }
+        }
+
+        /* ============ STICKY BOTTOM CTA ============ */
+        #sticky-cta {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 998;
+            background: white;
+            border-top: 2px solid #e5e7eb;
+            padding: 12px 20px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.12);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #sticky-cta-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 20px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            font-weight: 900;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 16px rgba(37,211,102,0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            animation: pulseCta 2s infinite;
+        }
+
+        @keyframes pulseCta {
+            0%, 100% { box-shadow: 0 4px 16px rgba(37,211,102,0.4); }
+            50% { box-shadow: 0 4px 28px rgba(37,211,102,0.65); }
+        }
+
+        /* ============ FOOTER ============ */
+        footer {
+            background: var(--dark);
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            padding: 28px 20px;
+            font-size: 0.85rem;
+        }
+
+        footer a { color: #25d366; text-decoration: none; font-weight: 700; }
+
+        .divider {
+            height: 6px;
+            background: linear-gradient(90deg, var(--boys), var(--girls));
+            border-radius: 50px;
+            margin: 0 20px;
+            opacity: 0.25;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: #7f8c8d;
+            font-size: 0.8em;
+            margin-right: 8px;
+            font-weight: normal;
+        }
+
+        .gold {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: row-reverse;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ANNOUNCEMENT BAR -->
+<div id="announcement-bar">
+    <span>🚚 عرض محدود: الشحن المجاني ينتهي خلال:</span>
+    <span class="timer-box" id="countdown">00:00:00</span>
+    <span>⚡ لا تفوّت الفرصة!</span>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-badge">🇲🇦 التوصيل لجميع مدن المغرب</div>
+    <h1>🎨 كتب تلوين للأطفال<br>إبداع بلا حدود!</h1>
+    <p class="hero-sub">شخصيات الكرتون المفضلة بألوان رائعة تخليهم يبدعون 🌈</p>
+</section>
+
+<!-- TRUST BADGES -->
+<div style="padding: 24px 20px; background: white;">
+    <div class="trust-row">
+        <div class="trust-badge">💳 الدفع عند الاستلام 🚚 توصيل لجميع المدن</div>
+        <div class="trust-badge">✅ جودة مضمونة 100%</div>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- OFFERS -->
+<section class="section" id="offers">
+    <h2 class="section-title">🔥 اختر عرضك المفضل</h2>
+    <p class="section-sub">كل العروض تشمل توصيل مجاني لبابك 🚪</p>
+
+    <div class="pricing-grid">
+        <div class="price-card" id="pc1" onclick="selectOffer('single')">
+            <div class="price-icon">📗</div>
+            <div class="price-name">كتاب واحد</div>
+            <div class="price-old">120 درهم</div>
+            <div class="price-amount">99 درهم</div>
+            <ul class="price-features">
+                <li><span class="check">✅</span> كتاب تلوين كرتوني</li>
+                <li><span class="check">✅</span> توصيل مجاني</li>
+                <li><span class="check">✅</span> دفع عند الاستلام</li>
+            </ul>
+        </div>
+
+        <div class="price-card featured" id="pc4" onclick="selectOffer('quad')">
+            <div class="featured-badge">⭐ الأكثر طلباً</div>
+            <div class="price-icon">📦</div>
+            <div class="price-name">العرض الذهبي : 4 كتب</div>
+            <div class="price-old">400 درهم</div>
+            <div class="price-amount gold">189 درهم</div>
+            <ul class="price-features">
+                <li><span class="check">✅</span> 4 كتب تلوين</li>
+                <li><span class="check">✅</span> هديتان مجانيتان 🎁🎁</li>
+                <li><span class="check">✅</span> توصيل مجاني</li>
+                <li><span class="check">✅</span> دفع عند الاستلام</li>
+                <li><span class="check">🔥</span> وفّر 211 درهم!</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ORDER FORM -->
+<section class="section" id="order-form">
+    <div class="order-section">
+        <h2 class="section-title" style="margin-bottom:8px;">📝 سجّل طلبك الآن</h2>
+        <p class="section-sub" style="margin-bottom:24px;">الدفع عند الاستلام 💚</p>
+
+        <label class="form-label">🛒 اختر عرضك</label>
+
+        <!-- Offer Alert -->
+        <div class="inline-alert alert-offer" id="alert-offer">
+            <span class="alert-icon">🛒</span>
+            <div class="alert-text">
+                <strong>لم تختر عرضاً بعد!</strong>
+                اختر إما كتاب واحد أو العرض الذهبي لإتمام طلبك 👇
+            </div>
+        </div>
+
+        <div class="offer-select-row">
+            <div class="offer-radio-card" id="sel-single" onclick="selectOffer('single')">
+                <div class="offer-radio-price">99 درهم</div>
+                <div class="offer-radio-label">📗 كتاب واحد</div>
+            </div>
+            
+            <div class="offer-radio-card gold-offer" id="sel-quad" onclick="selectOffer('quad')">
+                <div class="offer-radio-price gold">189 درهم</div>
+                <span class="old-price">400 درهم</span>
+                <div class="offer-radio-label">4 كتب + 2 هدايا مجانية 🎁</div>
+            </div>
+        </div>
+
+        <!-- Single book selection -->
+        <div id="single-book-row">
+            <label class="form-label">📚 اختر الكتاب (اختياري)</label>
+            <div class="book-chips" id="book-chips">
+                <span class="book-chip" data-book="بن تن" data-cat="boys" onclick="selectBook(this)">👽 بن تن</span>
+                <span class="book-chip" data-book="لوفي" data-cat="boys" onclick="selectBook(this)">⚓ لوفي</span>
+                <span class="book-chip" data-book="ناروتو" data-cat="boys" onclick="selectBook(this)">🍃 ناروتو</span>
+                <span class="book-chip" data-book="دراغون بول" data-cat="boys" onclick="selectBook(this)">🐉 دراغون بول</span>
+                <span class="book-chip" data-book="فتيات القوة" data-cat="girls" onclick="selectBook(this)">⚡ فتيات القوة</span>
+                <span class="book-chip" data-book="الجاسوسات" data-cat="girls" onclick="selectBook(this)">🕵️‍♀️ الجاسوسات</span>
+                <span class="book-chip" data-book="الدعسوقة" data-cat="girls" onclick="selectBook(this)">🐞 الدعسوقة</span>
+                <span class="book-chip" data-book="سيلور مون" data-cat="girls" onclick="selectBook(this)">🌙 سيلور مون</span>
+            </div>
+        </div>
+
+        <!-- Sub choice for quad -->
+        <div class="sub-choice" id="sub-choice">
+            <label class="form-label">📚 اختر الباك المناسب</label>
+            <div style="display: flex; gap: 5px;">
+                <button class="sub-btn boys" id="sub-btn-boys" onclick="selectSubType('boys')">💥 4 كتب للأولاد</button>
+                <button class="sub-btn girls" id="sub-btn-girls" onclick="selectSubType('girls')">💖 4 كتب للبنات</button>
+            </div>
+        </div>
+
+        <div class="sub-alert" id="sub-alert">
+            ⚠️ من فضلك اختر: هل الكتب للأولاد أم للبنات؟
+        </div>
+
+        <label class="form-label">👤 الاسم الكامل</label>
+        <input type="text" class="form-input" id="inp-name" placeholder="مثال: محمد أمين" oninput="clearFieldError(this)">
+
+        <label class="form-label">🏙️ عنوان التوصيل</label>
+        <input type="text" class="form-input" id="inp-city" placeholder="المدينة، الحي، رقم المنزل" oninput="clearFieldError(this)">
+
+        <label class="form-label">📱 رقم الهاتف</label>
+        <input type="tel" class="form-input" id="inp-phone" placeholder="06XXXXXXXX" dir="ltr" oninput="clearFieldError(this)">
+
+        <!-- Fields Alert -->
+        <div class="inline-alert alert-fields" id="alert-fields">
+            <span class="alert-icon">✏️</span>
+            <div class="alert-text">
+                <strong>الرجاء إكمال جميع الحقول!</strong>
+                <span id="alert-fields-detail">أدخل اسمك ومدينتك ورقم هاتفك لإتمام الطلب.</span>
+            </div>
+        </div>
+
+        <button class="submit-btn" onclick="submitOrder()">
+            تأكيد الطلب 🚀
+        </button>
+        <p style="text-align:center; margin-top:12px; font-size:0.82rem; color:var(--muted);">🔒 بياناتك في أمان تام · الدفع عند الاستلام فقط</p>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- REVIEWS -->
+<section class="section">
+    <h2 class="section-title">💬 ماذا قالوا عنا؟</h2>
+    <p class="section-sub">أكثر من 500 عائلة سعيدة في المغرب ❤️</p>
+    <div class="reviews-grid">
+        <div class="review-card">
+            <div class="review-stars">⭐⭐⭐⭐⭐</div>
+            <div class="review-text">"ولدي ما بقاش يحوس على التلفون، كيتلوّن ساعات بلا ما يعياا! الجودة عالية جداً ومرحبا"</div>
+            <div class="review-author">🌸 فاطمة - الدار البيضاء</div>
+        </div>
+        <div class="review-card">
+            <div class="review-stars">⭐⭐⭐⭐⭐</div>
+            <div class="review-text">"عرض الأربع كتب كان عرض خرافي! التوصيل جا سريع وبناتي فرحو بزاف بالهدايا 🎁"</div>
+            <div class="review-author">💙 حنان - الرباط</div>
+        </div>
+        <div class="review-card">
+            <div class="review-stars">⭐⭐⭐⭐⭐</div>
+            <div class="review-text">"سرسري بزاف! الجودة من الكرطون لحتى الأوراق ممتازة. غادي نعاود الطلب"</div>
+            <div class="review-author">⚡ يوسف - مراكش</div>
+        </div>
+        <div class="review-card">
+            <div class="review-stars">⭐⭐⭐⭐⭐</div>
+            <div class="review-text">"شريت الكتاب ديال ناروتو لولدي وخا ما كنت متوقعاش، كان سعيد جداً! شكراً"</div>
+            <div class="review-author">🚀 أمين - فاس</div>
+        </div>
+    </div>
+</section>
+
+<!-- FLOATING WHATSAPP -->
+<a id="float-wa" href="https://wa.me/212660242782" target="_blank" title="تواصل معنا عبر واتساب">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32"><path fill="white" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+</a>
+
+<!-- STICKY BOTTOM CTA -->
+<div id="sticky-cta">
+    <button id="sticky-cta-btn" onclick="scrollToOrder()">
+        🛒 اطلب الآن
+    </button>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <p>🎨 كتب التلوين المغرب · جميع الحقوق محفوظة</p>
+    <p style="margin-top:8px;">للتواصل المباشر: <a href="https://wa.me/212660242782">0660242782</a></p>
+</footer>
+
+<script>
+    let selectedOffer = null;
+    let selectedSubType = null;
+    let selectedBook = null;
+
+    // Countdown Timer
+    (function() {
+        const endTime = Date.now() + 20 * 60 * 1000;
+        function updateTimer() {
+            const remaining = Math.max(0, endTime - Date.now());
+            const mins = Math.floor(remaining / 60000);
+            const secs = Math.floor((remaining % 60000) / 1000);
+            document.getElementById('countdown').textContent = 
+                `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+            if (remaining > 0) requestAnimationFrame(updateTimer);
+        }
+        updateTimer();
+    })();
+
+    function scrollToOrder() {
+        document.getElementById('order-form').scrollIntoView({behavior:'smooth', block:'center'});
+    }
+
+    function showAlert(id) {
+        const el = document.getElementById(id);
+        el.classList.remove('visible');
+        void el.offsetWidth;
+        el.classList.add('visible');
+    }
+
+    function hideAlert(id) {
+        document.getElementById(id).classList.remove('visible');
+    }
+
+    function clearFieldError(input) {
+        input.classList.remove('error');
+        const name = document.getElementById('inp-name').value.trim();
+        const city = document.getElementById('inp-city').value.trim();
+        const phone = document.getElementById('inp-phone').value.trim();
+        if (name && city && phone) hideAlert('alert-fields');
+    }
+
+    function selectOffer(type) {
+        selectedOffer = type;
+        selectedBook = null;
+        selectedSubType = null;
+
+        hideAlert('alert-offer');
+        document.getElementById('sub-alert').classList.remove('visible');
+
+        document.getElementById('sel-single').classList.remove('highlight-error');
+        document.getElementById('sel-quad').classList.remove('highlight-error');
+
+        document.getElementById('pc1').style.borderColor = type === 'single' ? 'var(--boys)' : '';
+        document.getElementById('pc4').style.borderColor = type === 'quad' ? 'var(--gold)' : '';
+
+        document.getElementById('sel-single').classList.toggle('active', type === 'single');
+        document.getElementById('sel-quad').classList.toggle('active', type === 'quad');
+
+        const subChoice = document.getElementById('sub-choice');
+        const singleRow = document.getElementById('single-book-row');
+
+        if (type === 'quad') {
+            subChoice.classList.add('visible');
+            singleRow.classList.remove('visible');
+            document.getElementById('sub-btn-boys').classList.remove('chosen');
+            document.getElementById('sub-btn-girls').classList.remove('chosen');
+        } else {
+            subChoice.classList.remove('visible');
+            singleRow.classList.add('visible');
+        }
+
+        setTimeout(() => document.getElementById('order-form').scrollIntoView({behavior: 'smooth', block: 'center'}), 200);
+    }
+
+    function selectSubType(type) {
+        selectedSubType = type;
+        document.getElementById('sub-alert').classList.remove('visible');
+
+        const boysBtn = document.getElementById('sub-btn-boys');
+        const girlsBtn = document.getElementById('sub-btn-girls');
+        boysBtn.classList.remove('chosen');
+        girlsBtn.classList.remove('chosen');
+
+        if (type === 'boys') boysBtn.classList.add('chosen');
+        else girlsBtn.classList.add('chosen');
+    }
+
+    function selectBook(el) {
+        document.querySelectorAll('.book-chip').forEach(c => c.className = 'book-chip');
+        const cat = el.dataset.cat;
+        el.classList.add(cat === 'boys' ? 'selected-boys' : 'selected-girls');
+        selectedBook = el.dataset.book;
+    }
+
+    // Hide sticky CTA when form is visible
+    (function() {
+        const stickyCta = document.getElementById('sticky-cta');
+        const orderForm = document.getElementById('order-form');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                stickyCta.style.display = entry.isIntersecting ? 'none' : 'flex';
+            });
+        }, { threshold: 0.2 });
+        observer.observe(orderForm);
+    })();
+
+    function submitOrder() {
+        const nameEl  = document.getElementById('inp-name');
+        const cityEl  = document.getElementById('inp-city');
+        const phoneEl = document.getElementById('inp-phone');
+        const name  = nameEl.value.trim();
+        const city  = cityEl.value.trim();
+        const phone = phoneEl.value.trim();
+
+        let hasError = false;
+
+        if (!selectedOffer) {
+            showAlert('alert-offer');
+            ['sel-single','sel-quad'].forEach(id => {
+                const card = document.getElementById(id);
+                card.classList.add('highlight-error');
+                setTimeout(() => card.classList.remove('highlight-error'), 600);
+            });
+            document.getElementById('alert-offer').scrollIntoView({behavior:'smooth', block:'center'});
+            return;
+        }
+
+        if (selectedOffer === 'quad' && !selectedSubType) {
+            const subAlert = document.getElementById('sub-alert');
+            subAlert.classList.add('visible');
+            subAlert.scrollIntoView({behavior:'smooth', block:'center'});
+            return;
+        }
+
+        const missing = [];
+        if (!name)  { nameEl.classList.add('error'); missing.push('الاسم'); hasError = true; }
+        if (!city)  { cityEl.classList.add('error'); missing.push('المدينة'); hasError = true; }
+        if (!phone) { phoneEl.classList.add('error'); missing.push('رقم الهاتف'); hasError = true; }
+
+        if (hasError) {
+            document.getElementById('alert-fields-detail').textContent = `الحقول الناقصة: ${missing.join('، ')}.`;
+            showAlert('alert-fields');
+            document.getElementById('alert-fields').scrollIntoView({behavior:'smooth', block:'center'});
+            return;
+        }
+
+        hideAlert('alert-offer');
+        hideAlert('alert-fields');
+
+        let offerText = '';
+        if (selectedOffer === 'single') {
+            offerText = `📗 كتاب واحد - 99 درهم`;
+            if (selectedBook) offerText += `\n📌 الكتاب المختار: ${selectedBook}`;
+        } else {
+            offerText = `⭐ العرض الذهبي (4 كتب + هديتان) - 189 درهم`;
+            offerText += `\n👧👦 النوع: ${selectedSubType === 'boys' ? '💥 4 كتب للأبطال الصغار' : '💖 4 كتب للأميرات المبدعات'}`;
+        }
+
+        const message =
+`السلام عليكم 👋
+
+أنا مهتم بكتب التلوين 🎨 وبغيت نأكد الطلب ديالي:
+
+👤 الاسم: ${name}
+🏙️ المدينة: ${city}
+📱 الهاتف: ${phone}
+
+📦 العرض المختار:
+${offerText}
+
+📩 المرجو تأكيد الطلب ووقت التوصيل.
+
+شكراً بزاف 🙏`;
+
+        const encoded = encodeURIComponent(message);
+        window.open(`https://wa.me/212660242782?text=${encoded}`, '_blank');
+    }
+</script>
+</body>
+</html>
