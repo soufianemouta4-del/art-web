@@ -182,7 +182,7 @@
             box-shadow: 0 4px 12px rgba(245,158,11,0.4);
         }
 
-        .price-icon { font-size: 2.5rem; margin-bottom: 8px; }
+        .price-icon { font-size: 2.5rem; }
         .price-name { font-size: 1.1rem; font-weight: 900; color: var(--dark); margin-bottom: 4px; }
         .price-amount { font-size: 2rem; font-weight: 900; color: var(--boys); margin: 10px 0; }
         .price-amount.gold { color: #d97706; }
@@ -556,6 +556,7 @@
             justify-content: center;
             flex-direction: row-reverse;
         }
+        
     </style>
 </head>
 <body>
@@ -584,14 +585,15 @@
 
 <div class="divider"></div>
 
-<!-- OFFERS -->
-<section class="section" id="offers">
+<<section class="section" id="offers">
     <h2 class="section-title">🔥 اختر عرضك المفضل</h2>
     <p class="section-sub">كل العروض تشمل توصيل مجاني لبابك 🚪</p>
 
     <div class="pricing-grid">
         <div class="price-card" id="pc1" onclick="selectOffer('single')">
-            <div class="price-icon">📗</div>
+            <div class="price-iconss" style="width: 100%;">
+                <img src="./2 (2).png" alt="عرض 4 كتب" style="width: 100%;border-radius: 10px; height: auto;">
+            </div>
             <div class="price-name">كتاب واحد</div>
             <div class="price-old">120 درهم</div>
             <div class="price-amount">99 درهم</div>
@@ -604,13 +606,18 @@
 
         <div class="price-card featured" id="pc4" onclick="selectOffer('quad')">
             <div class="featured-badge">⭐ الأكثر طلباً</div>
-            <div class="price-icon">📦</div>
+            
+            <div class="price-iconss" style="width: 100%;">
+                <img src="./3.png" alt="عرض 4 كتب" style="width: 100%;border-radius: 10px; height: auto;">
+            </div>
+
             <div class="price-name">العرض الذهبي : 4 كتب</div>
             <div class="price-old">400 درهم</div>
             <div class="price-amount gold">189 درهم</div>
             <ul class="price-features">
                 <li><span class="check">✅</span> 4 كتب تلوين</li>
-                <li><span class="check">✅</span> هديتان مجانيتان 🎁🎁</li>
+                <li><span class="check">✅</span>   علبة اقلام ملونة</li>
+                <li><span class="check">✅</span> هدية مجانية 🎁</li>
                 <li><span class="check">✅</span> توصيل مجاني</li>
                 <li><span class="check">✅</span> دفع عند الاستلام</li>
                 <li><span class="check">🔥</span> وفّر 211 درهم!</li>
