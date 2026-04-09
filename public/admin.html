@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>داشبورد الطلبات - art-web</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: #f8f4eb;
+      color: #2d2110;
+      padding: 15px;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      color: #2d6a4f;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .total {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #2d6a4f;
+    }
+    .refresh-btn {
+      padding: 12px 20px;
+      background: #c9a84c;
+      color: #1a1208;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    /* جدول ريسبونسيف */
+    .table-container {
+      overflow-x: auto;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      background: white;
+    }
+    table {
+      width: 100%;
+      min-width: 700px; /* لضمان عدم الضغط كثيراً على الموبايل */
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 14px 12px;
+      text-align: right;
+      border-bottom: 1px solid #e0d4c0;
+    }
+    th {
+      background: #c9a84c;
+      color: #1a1208;
+      font-weight: 700;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    tr:hover {
+      background: #fdf8ee;
+    }
+
+    /* تصميم خاص للموبايل */
+    @media (max-width: 768px) {
+      h1 { font-size: 1.6rem; }
+      th, td { padding: 12px 8px; font-size: 0.95rem; }
+      .header { flex-direction: column; align-items: stretch; }
+      .total { text-align: center; }
+    }
+
+    /* بطاقات على الموبايل (أفضل تجربة) */
+    .card {
+      display: none;
+      background: white;
+      margin-bottom: 15px;
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    @media (max-width: 768px) {
+      table { display: none; }
+      .card { display: block; }
+    }
+
+    .card-item {
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .card-item strong {
+      color: #5a4b36;
+      display: inline-block;
+      width: 110px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📊 داشبورد الطلبات</h1>
+
+    <div class="header">
+      <div class="total" id="total-orders">عدد الطلبات: 0</div>
+      <button class="refresh-btn" onclick="loadOrders()">تحديث البيانات 🔄</button>
+    </div>
+
+    <!-- جدول للكمبيوتر والتابلت -->
+    <div class="table-container">
+      <table id="orders-table">
+        <thead>
+          <tr>
+            <th>التاريخ</th>
+            <th>الاسم</th>
+            <th>الهاتف</th>
+            <th>العنوان</th>
+            <th>العرض</th>
+            <th>الكتاب</th>
+          </tr>
+        </thead>
+        <tbody id="orders-body"></tbody>
+      </table>
+    </div>
+
+    <!-- بطاقات للهواتف -->
+    <div id="cards-container"></div>
+
+    <div id="no-data" style="text-align:center; padding:60px 20px; color:#777; display:none;">
+      لا توجد طلبات مسجلة حتى الآن
+    </div>
+  </div>
+
+  <script>
+    async function loadOrders() {
+      try {
+        const res = await fetch('/api/orders');
+        const orders = await res.json();
+
+        const tbody = document.getElementById('orders-body');
+        const cardsContainer = document.getElementById('cards-container');
+        const totalEl = document.getElementById('total-orders');
+        const noData = document.getElementById('no-data');
+
+        tbody.innerHTML = '';
+        cardsContainer.innerHTML = '';
+
+        if (orders.length === 0) {
+          noData.style.display = 'block';
+          totalEl.textContent = 'عدد الطلبات: 0';
+          return;
+        }
+
+        noData.style.display = 'none';
+        totalEl.textContent = `عدد الطلبات: ${orders.length}`;
+
+        orders.forEach(order => {
+          const date = new Date(order.date).toLocaleString('ar-MA', {
+            year: 'numeric', month: 'short', day: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+          });
+
+          // إخفاء جزئي للهاتف
+          const hiddenPhone = order.phone.replace(/(\d{2})\d{4}(\d{2})/, '$1****$2');
+
+          // الصف للجدول
+          const row = `
+            <tr>
+              <td>${date}</td>
+              <td><strong>${order.name}</strong></td>
+              <td dir="ltr">${hiddenPhone}</td>
+              <td>${order.address}</td>
+              <td>${order.offer}</td>
+              <td>${order.selectedBook || '—'}</td>
+            </tr>
+          `;
+          tbody.innerHTML += row;
+
+          // البطاقة للموبايل
+          const card = `
+            <div class="card">
+              <div class="card-item"><strong>التاريخ:</strong> ${date}</div>
+              <div class="card-item"><strong>الاسم:</strong> ${order.name}</div>
+              <div class="card-item"><strong>الهاتف:</strong> ${hiddenPhone}</div>
+              <div class="card-item"><strong>العنوان:</strong> ${order.address}</div>
+              <div class="card-item"><strong>العرض:</strong> ${order.offer}</div>
+              <div class="card-item"><strong>الكتاب:</strong> ${order.selectedBook || '—'}</div>
+            </div>
+          `;
+          cardsContainer.innerHTML += card;
+        });
+
+      } catch (err) {
+        console.error(err);
+        alert('حدث خطأ أثناء تحميل الطلبات');
+      }
+    }
+
+    // تحميل البيانات تلقائيًا عند فتح الصفحة
+    window.onload = loadOrders;
+  </script>
+</body>
+</html>

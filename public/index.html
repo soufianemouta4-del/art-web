@@ -623,27 +623,60 @@
     }
 
     function submitOrder() {
-      const name = document.getElementById('fullname').value.trim();
-      const addr = document.getElementById('address').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      
-      let valid = true;
-      if (name.length < 3) { document.getElementById('err-name').classList.add('show'); valid = false; }
-      else { document.getElementById('err-name').classList.remove('show'); }
-      
-      if (addr.length < 5) { document.getElementById('err-address').classList.add('show'); valid = false; }
-      else { document.getElementById('err-address').classList.remove('show'); }
-      
-      if (!/^\d{10}$/.test(phone.replace(/\s/g, ''))) { document.getElementById('err-phone').classList.add('show'); valid = false; }
-      else { document.getElementById('err-phone').classList.remove('show'); }
+  const name = document.getElementById('fullname').value.trim();
+  const addr = document.getElementById('address').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  
+  let valid = true;
+  if (name.length < 3) { 
+    document.getElementById('err-name').classList.add('show'); 
+    valid = false; 
+  } else { 
+    document.getElementById('err-name').classList.remove('show'); 
+  }
+  
+  if (addr.length < 5) { 
+    document.getElementById('err-address').classList.add('show'); 
+    valid = false; 
+  } else { 
+    document.getElementById('err-address').classList.remove('show'); 
+  }
+  
+  if (!/^\d{10}$/.test(phone.replace(/\s/g, ''))) { 
+    document.getElementById('err-phone').classList.add('show'); 
+    valid = false; 
+  } else { 
+    document.getElementById('err-phone').classList.remove('show'); 
+  }
 
-      if (!valid) return;
+  if (!valid) return;
 
-      const offerText = selectedOffer === 'bundle' ? 'باقة الكتابين  (149 د.م)' : `كتاب ${selectedBook} (99 د.م)`;
-      const msg = `مرحباً فريق art-web،\n\nأود طلب كتب الفن من خلال موقعكم.\n\nالعرض المطلوب: ${offerText}\nالاسم: ${name}\nعنوان التوصيل: ${addr}\nرقم الهاتف: ${phone}\n\nشكراً لكم.`;
-      window.open(`https://wa.me/212660242782?text=${encodeURIComponent(msg)}`, '_blank');
+  const offerText = selectedOffer === 'bundle' 
+    ? 'باقة الكتابين + هدية مجانية (149 د.م)' 
+    : `${selectedBook || 'كتاب واحد'} (99 د.م)`;
+
+  // إرسال البيانات إلى السيرفر
+  fetch('/submit-order', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: name,
+      address: addr,
+      phone: phone,
+      offer: offerText,
+      selectedBook: selectedBook || ''
+    })
+  })
+  .then(response => {
+    if (response.redirected) {
+      window.location.href = response.url;   // الانتقال إلى thanks.html
     }
-  </script>
+  })
+  .catch(err => {
+    console.error('Error:', err);
+    alert('حدث خطأ في الاتصال. حاول مرة أخرى.');
+  });
+}  </script>
 <script type="text/javascript">
   (function(c,l,a,r,i,t,y){
       c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
