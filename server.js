@@ -43,6 +43,9 @@ app.get('/coloring', (req, res) => {
 app.get('/thanks', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'thanks.html'));
 });
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
 // API لجلب جميع الطلبات (للداشبورد)
 app.get('/api/orders', async (req, res) => {
     try {
