@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>باك 4 كتب تلوين للأطفال - عرض خاص</title>
+
+  <!-- خط Cairo من Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ===== متغيرات الألوان والثيم ===== */
+    :root {
+      --yellow:   #FFD60A;
+      --yellow-soft: #FFF3B0;
+      --blue:     #1B6CA8;
+      --blue-light: #4EAADB;
+      --pink:     #FF4D8D;
+      --pink-soft: #FFE0EE;
+      --orange:   #FF6B2B;
+      --red:      #E63946;
+      --green:    #2DC653;
+      --white:    #FFFFFF;
+      --off-white:#FFF9F0;
+      --dark:     #1A1A2E;
+      --gray:     #6B7280;
+      --radius:   16px;
+      --shadow:   0 8px 32px rgba(27, 108, 168, 0.15);
+      --shadow-card: 0 4px 24px rgba(0,0,0,0.10);
+    }
+
+    /* ===== ريسيت وأساسيات ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--off-white);
+      color: var(--dark);
+      direction: rtl;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ===== شريط علوي للعرض المحدود ===== */
+    .top-bar {
+      background: linear-gradient(90deg, var(--red) 0%, var(--orange) 100%);
+      color: white;
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      position: relative;
+      overflow: hidden;
+    }
+    .top-bar::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      animation: shimmer 2.5s infinite;
+    }
+    @keyframes shimmer {
+      0%   { left: -100%; }
+      100% { left: 150%; }
+    }
+    .top-bar span.fire { font-size: 18px; }
+
+    /* ===== هيدر / شعار ===== */
+    header {
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--blue);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo span.dot { color: var(--pink); }
+    .header-badge {
+      background: var(--green);
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 20px;
+    }
+
+    /* ===== قسم المنتج الرئيسي ===== */
+    .product-section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    /* ===== معرض الصور ===== */
+    .gallery-wrap {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .main-image-box {
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--white);
+      box-shadow: var(--shadow-card);
+      aspect-ratio: 4/3;
+      position: relative;
+    }
+    .main-image-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+    .main-image-box img.fade-out {
+      opacity: 0;
+      transform: scale(1.04);
+    }
+    .badge-new {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: var(--pink);
+      color: white;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 5px 14px;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(255,77,141,0.4);
+    }
+    /* المصغرات */
+    .thumbnails {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .thumbnails::-webkit-scrollbar { display: none; }
+    .thumb {
+      flex: 0 0 72px;
+      height: 72px;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: border-color 0.2s, transform 0.2s;
+      background: #eee;
+    }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .thumb.active { border-color: var(--blue); transform: scale(1.06); }
+    .thumb:hover { border-color: var(--pink); }
+
+    /* ===== معلومات المنتج ===== */
+    .product-info { }
+    .product-title {
+      font-size: 26px;
+      font-weight: 900;
+      line-height: 1.35;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+    .product-title em {
+      font-style: normal;
+      color: var(--blue);
+    }
+    .stars-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      color: var(--gray);
+    }
+    .stars { color: var(--yellow); font-size: 18px; letter-spacing: 1px; }
+
+    /* ===== السعر ===== */
+    .price-block {
+      background: linear-gradient(135deg, #FFF3B0 0%, #FFE0EE 100%);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .price-original {
+      font-size: 20px;
+      color: var(--gray);
+      text-decoration: line-through;
+      font-weight: 600;
+    }
+    .price-current {
+      font-size: 42px;
+      font-weight: 900;
+      color: var(--red);
+      line-height: 1;
+    }
+    .price-current span { font-size: 20px; font-weight: 700; }
+    .price-save {
+      background: var(--green);
+      color: white;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 20px;
+    }
+
+    /* ===== الهدايا ===== */
+    .gifts-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .gift-badge {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--white);
+      border: 2px dashed var(--yellow);
+      border-radius: 12px;
+      padding: 9px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dark);
+      flex: 1 1 140px;
+      box-shadow: 0 2px 8px rgba(255,214,10,0.15);
+    }
+    .gift-badge .icon { font-size: 22px; }
+
+    /* ===== اختيار العرض (Radio Buttons) ===== */
+    .variant-section {
+      margin-bottom: 22px;
+    }
+    .variant-label {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: var(--dark);
+    }
+    .variant-options {
+      display: flex;
+      gap: 12px;
+    }
+    .variant-option { position: relative; flex: 1; }
+    .variant-option input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+    .variant-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 16px 10px;
+      border-radius: 14px;
+      border: 3px solid #E5E7EB;
+      background: var(--white);
+      cursor: pointer;
+      transition: all 0.22s ease;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--dark);
+      text-align: center;
+      box-shadow: var(--shadow-card);
+    }
+    .variant-card .emoji { font-size: 30px; }
+    .variant-option input[type="radio"]:checked + .variant-card {
+      border-color: var(--blue);
+      background: linear-gradient(135deg, #E8F4FD 0%, #FFF3F8 100%);
+      color: var(--blue);
+      box-shadow: 0 4px 20px rgba(27,108,168,0.2);
+      transform: translateY(-2px);
+    }
+    .variant-price {
+      font-size: 14px;
+      color: var(--red);
+      font-weight: 800;
+    }
+
+    /* ===== فورمة الطلب ===== */
+    .order-form-section {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 28px;
+    }
+    .form-title {
+      font-size: 20px;
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 20px;
+      color: var(--dark);
+    }
+    .form-title span { color: var(--pink); }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--dark);
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 13px 16px;
+      border: 2px solid #E5E7EB;
+      border-radius: 12px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--dark);
+      background: var(--off-white);
+      direction: rtl;
+      transition: border-color 0.2s;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--blue);
+      background: #fff;
+    }
+    .form-group input::placeholder { color: #b0b8c1; font-weight: 500; }
+
+    /* ===== زر الطلب ===== */
+    .btn-order {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--green) 0%, #22a84a 100%);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      cursor: pointer;
+      margin-top: 6px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 6px 24px rgba(45,198,83,0.45);
+      animation: pulse-btn 1.8s infinite;
+      transition: transform 0.15s;
+    }
+    .btn-order:hover {
+      transform: scale(1.02);
+      animation: none;
+    }
+    .btn-order:active { transform: scale(0.98); }
+    .btn-order::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      animation: shimmer 2s infinite 0.5s;
+    }
+    @keyframes pulse-btn {
+      0%, 100% { box-shadow: 0 6px 24px rgba(45,198,83,0.45); transform: scale(1); }
+      50%       { box-shadow: 0 8px 36px rgba(45,198,83,0.7);  transform: scale(1.015); }
+    }
+
+    /* ===== بادجات الثقة ===== */
+    .trust-badges {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .trust-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray);
+      background: #F3F4F6;
+      padding: 7px 12px;
+      border-radius: 20px;
+    }
+    .trust-badge .ticon { font-size: 16px; }
+
+    /* ===== مميزات المنتج ===== */
+    .features-section {
+      margin-bottom: 28px;
+    }
+    .section-title {
+      font-size: 20px;
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 18px;
+      color: var(--dark);
+      position: relative;
+    }
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--pink), var(--blue));
+      border-radius: 4px;
+      margin: 8px auto 0;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .feature-card {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 16px 14px;
+      text-align: center;
+      box-shadow: var(--shadow-card);
+      transition: transform 0.2s;
+    }
+    .feature-card:hover { transform: translateY(-3px); }
+    .feature-card .ficon { font-size: 34px; margin-bottom: 8px; }
+    .feature-card h4 { font-size: 14px; font-weight: 800; color: var(--dark); margin-bottom: 4px; }
+    .feature-card p  { font-size: 12px; color: var(--gray); line-height: 1.5; }
+
+    /* ===== الأسئلة الشائعة ===== */
+    .faq-section { margin-bottom: 32px; }
+    .faq-item {
+      background: var(--white);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+    .faq-question {
+      padding: 15px 18px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--dark);
+      user-select: none;
+    }
+    .faq-arrow {
+      transition: transform 0.3s;
+      color: var(--blue);
+      font-size: 18px;
+      font-weight: 900;
+    }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.2s;
+      font-size: 14px;
+      color: var(--gray);
+      line-height: 1.7;
+      padding: 0 18px;
+    }
+    .faq-item.open .faq-answer {
+      max-height: 200px;
+      padding: 0 18px 16px;
+    }
+
+    /* ===== آراء العملاء ===== */
+    .reviews-section { margin-bottom: 32px; }
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .review-card {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 16px 18px;
+      box-shadow: var(--shadow-card);
+      border-right: 4px solid var(--yellow);
+    }
+    .review-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue-light), var(--pink));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .reviewer-name { font-size: 14px; font-weight: 800; }
+    .reviewer-city { font-size: 12px; color: var(--gray); }
+    .review-stars { color: var(--yellow); font-size: 14px; }
+    .review-text { font-size: 14px; color: #444; line-height: 1.65; }
+
+    /* ===== عداد العرض المحدود ===== */
+    .countdown-bar {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-light) 100%);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin-bottom: 28px;
+      text-align: center;
+      color: white;
+    }
+    .countdown-bar p { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+    .timer-boxes {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+    }
+    .timer-box {
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
+      padding: 10px 16px;
+      min-width: 64px;
+    }
+    .timer-num {
+      font-size: 30px;
+      font-weight: 900;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .timer-label { font-size: 11px; font-weight: 600; opacity: 0.85; }
+
+    /* ===== شريط التوصيل ===== */
+    .delivery-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--yellow-soft);
+      border: 2px solid var(--yellow);
+      border-radius: 14px;
+      padding: 14px 20px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    .delivery-bar .dicon { font-size: 26px; }
+
+    /* ===== فوتر ===== */
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      padding: 24px 16px;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+    footer strong { color: white; }
+
+    /* ===== مودال النجاح ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-box {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 36px 28px;
+      text-align: center;
+      max-width: 360px;
+      width: 100%;
+      animation: pop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes pop-in {
+      0%   { transform: scale(0.6); opacity: 0; }
+      100% { transform: scale(1);   opacity: 1; }
+    }
+    .modal-icon { font-size: 64px; margin-bottom: 16px; }
+    .modal-title { font-size: 22px; font-weight: 900; margin-bottom: 10px; color: var(--green); }
+    .modal-text  { font-size: 15px; color: var(--gray); line-height: 1.7; margin-bottom: 22px; }
+    .modal-close {
+      padding: 12px 32px;
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* ===== Responsive Tablet+ ===== */
+    @media (min-width: 640px) {
+      .gallery-wrap {
+        grid-template-columns: auto 1fr;
+      }
+      .main-image-box { aspect-ratio: 1/1; }
+      .thumbnails {
+        flex-direction: column;
+        overflow-y: auto;
+        overflow-x: hidden;
+        width: 76px;
+      }
+      .thumb { flex: 0 0 72px; }
+      .reviews-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (min-width: 768px) {
+      .product-section { padding: 32px 24px 48px; }
+      .product-title { font-size: 30px; }
+      .price-current { font-size: 50px; }
+      .features-grid { grid-template-columns: repeat(4, 1fr); }
+      .btn-order { font-size: 22px; }
+    }
+    @media (min-width: 960px) {
+      .product-wrap {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: start;
+      }
+      .order-form-section { position: sticky; top: 80px; }
+    }
+    .fixed-order-bar {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: white;
+  padding: 10px 16px;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+  z-index: 999;
+}
+
+.fixed-order-bar button {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 18px;
+  font-weight: 900;
+  color: white;
+  background: linear-gradient(135deg, #2DC653, #22a84a);
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(45,198,83,0.5);
+  animation: pulse-btn 1.6s infinite;
+}
+  </style>
+</head>
+<body>
+
+  <!-- ===== شريط العرض المحدود ===== -->
+
+
+  <!-- ===== الهيدر ===== -->
+  <header>
+
+    <div class="top-bar">
+        <span style="width: 100%;">🔥</span>
+        عرض محدود: <strong>توصيل مجاني هدا الاسبوع فقط!</strong> — الطلبات تُعالَج بسرعة قبل النفاد
+        <span >🔥</span>
+      </div>
+  </header>
+
+  <!-- ===== المحتوى الرئيسي ===== -->
+  <main>
+    <div class="product-section">
+
+      <!-- عداد التايمر -->
+      <div class="countdown-bar">
+        <p>⏰ ينتهي العرض الخاص بعد:</p>
+        <div class="timer-boxes">
+          <div class="timer-box">
+            <div class="timer-num" id="t-hours">05</div>
+            <div class="timer-label">ساعة</div>
+          </div>
+          <div class="timer-box">
+            <div class="timer-num" id="t-mins">47</div>
+            <div class="timer-label">دقيقة</div>
+          </div>
+          <div class="timer-box">
+            <div class="timer-num" id="t-secs">00</div>
+            <div class="timer-label">ثانية</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-wrap">
+
+        <!-- === عمود الصور والمعلومات === -->
+        <div class="product-left">
+
+          <!-- معرض الصور -->
+          <div class="gallery-wrap">
+            <!-- المصغرات (على الجانب في الشاشات الكبيرة) -->
+            
+            <!-- الصورة الرئيسية -->
+            <div class="main-image-box">
+              <img id="main-img"
+                src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&h=600&fit=crop"
+                alt="باك 4 كتب تلوين للأطفال" />
+              <div class="badge-new">🆕 عرض حصري</div>
+            </div>
+            <div class="thumbnails" id="thumbs">
+                <div class="thumb active" onclick="switchImage(0, this)">
+                  <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=150&h=150&fit=crop" alt="كتاب تلوين 1" />
+                </div>
+                <div class="thumb" onclick="switchImage(1, this)">
+                  <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=150&h=150&fit=crop" alt="كتاب تلوين 2" />
+                </div>
+                <div class="thumb" onclick="switchImage(2, this)">
+                  <img src="https://images.unsplash.com/photo-1560343776-97e7d202ff0e?w=150&h=150&fit=crop" alt="كتاب تلوين 3" />
+                </div>
+                <div class="thumb" onclick="switchImage(3, this)">
+                  <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=150&h=150&fit=crop" alt="علبة ألوان" />
+                </div>
+              </div>
+          </div>
+
+          <!-- معلومات المنتج -->
+          <div class="product-info">
+            <h1 class="product-title">
+              باك <em>4 كتب تلوين</em> إبداعية للأطفال 🎨
+            </h1>
+            <div class="stars-row">
+              <span class="stars">★★★★★</span>
+              <span>4.9 من 5 — <strong>+247 مراجعة</strong></span>
+            </div>
+
+            <!-- السعر -->
+            <div class="price-block">
+              <div>
+                  <div class="price-current">189 <span>درهم</span></div>
+                  <div class="price-original">299 درهم</div>
+              </div>
+              <div class="price-save">وفّر 110 درهم 🎉</div>
+            </div>
+
+            <!-- الهدايا المجانية -->
+            <div class="gifts-row">
+              <div class="gift-badge">
+                <span class="icon">🖍️</span>
+                <span>علبة ألوان مجانية</span>
+              </div>
+              <div class="gift-badge">
+                <span class="icon">🎁</span>
+                <span>هدية مفاجأة</span>
+              </div>
+              <div class="gift-badge">
+                <span class="icon">🚚</span>
+                <span>توصيل مجاني</span>
+              </div>
+            </div>
+
+            <!-- شريط التوصيل -->
+            <div class="delivery-bar">
+              <span class="dicon">📦</span>
+              <span>التوصيل خلال <strong>1-2 أيام</strong> لجميع مدن المغرب</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- === عمود الفورمة === -->
+        <div class="product-right">
+
+          <!-- اختيار الجنس -->
+          <div class="variant-section" style="background:var(--white);border-radius:var(--radius);padding:20px;margin-bottom:20px;box-shadow:var(--shadow-card);">
+            <div class="variant-label">🎯 اختر الباك المناسب لطفلك:</div>
+            <div class="variant-options">
+              <label class="variant-option">
+                <input type="radio" name="variant" value="boys" checked id="var-boys" />
+                <div class="variant-card">
+                  <span class="emoji">👦</span>
+                  <span>باك الأولاد</span>
+                  <span class="variant-price">189 درهم</span>
+                </div>
+              </label>
+              <label class="variant-option">
+                <input type="radio" name="variant" value="girls" id="var-girls" />
+                <div class="variant-card">
+                  <span class="emoji">👧</span>
+                  <span>باك البنات</span>
+                  <span class="variant-price">189 درهم</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- فورمة الطلب -->
+          <div class="order-form-section">
+            <div class="form-title">🛒 أكمل طلبك الآن <span>مجاناً</span></div>
+
+            <div class="form-group">
+              <label for="f-name">👤 الاسم الكامل</label>
+              <input type="text" id="f-name" placeholder="مثال: فاطمة الزهراء" />
+            </div>
+            <div class="form-group">
+                <label for="f-address">📍 المدينة و العنوان التفصيلي</label>
+                <input type="text" id="f-address" placeholder="المدينة , الحي, الشارع، رقم المنزل..." />
+              </div>
+  
+            <div class="form-group">
+              <label for="f-phone">📞 رقم الهاتف</label>
+              <input type="tel" id="f-phone" placeholder="06XXXXXXXX أو 07XXXXXXXX" />
+            </div>
+           
+            <!-- زر الطلب -->
+            <button class="btn-order" id="btn-order" onclick="submitOrder()">
+              ✅ أكد طلبك الآن — توصيل مجاني
+            </button>
+
+            <!-- بادجات الثقة -->
+            <div class="trust-badges">
+              <div class="trust-badge"><span class="ticon">🚀</span> توصيل سريع</div>
+              <div class="trust-badge"><span class="ticon">🛡️</span> ضمان الجودة</div>
+              <div class="trust-badge"><span class="ticon">💵</span> الدفع عند الاستلام</div>
+              <div class="trust-badge"><span class="ticon">🔄</span> إرجاع مضمون</div>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /product-wrap -->
+
+      <!-- ===== مميزات المنتج ===== -->
+      <div class="features-section">
+        <div class="section-title">لماذا تختار باكنا؟ 🌟</div>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="ficon">🎨</div>
+            <h4>120+ صفحة تلوين</h4>
+            <p>رسومات متنوعة ومناسبة لعمر طفلك</p>
+          </div>
+          <div class="feature-card">
+            <div class="ficon">🧠</div>
+            <h4>تنمية الإبداع</h4>
+            <p>تحفز التفكير الإبداعي والمهارات الحركية</p>
+          </div>
+          <div class="feature-card">
+            <div class="ficon">📵</div>
+            <h4>بديل للشاشات</h4>
+            <p>ترفيه صحي وتعليمي بعيداً عن الهاتف</p>
+          </div>
+          <div class="feature-card">
+            <div class="ficon">✅</div>
+            <h4>ورق عالي الجودة</h4>
+            <p>مناسب للألوان الخشبية والفلوماستر</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== الأسئلة الشائعة ===== -->
+      <div class="faq-section">
+        <div class="section-title">أسئلة شائعة ❓</div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-question">
+            كيف يتم التوصيل؟
+            <span class="faq-arrow">▼</span>
+          </div>
+          <div class="faq-answer">
+            نوصّل لجميع مدن المغرب عبر Amana و forcelog. يصل الطلب عادةً خلال 2 إلى 4 أيام عمل. ستتلقى اتصالاً من مندوب التوصيل قبل الوصول.
+          </div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-question">
+            هل الدفع عند الاستلام متاح؟
+            <span class="faq-arrow">▼</span>
+          </div>
+          <div class="faq-answer">
+            نعم 100%! نقبل الدفع نقداً عند استلام الطلب فقط. لا حاجة لأي بطاقة بنكية أو حساب إلكتروني.
+          </div>
+        </div>
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-question">
+            لأي عمر مناسب هذا المنتج؟
+            <span class="faq-arrow">▼</span>
+          </div>
+          <div class="faq-answer">
+            الكتب مناسبة للأطفال من 4 إلى 12 سنة. كل مجموعة تحتوي على 4 كتب بمستويات صعوبة مختلفة تناسب مراحل عمرية متعددة.
+          </div>
+        </div>
+
+      </div>
+
+    </div><!-- /product-section -->
+  </main>
+
+  <!-- ===== فوتر ===== -->
+  <footer>
+    <strong>🎨 ألواني</strong> — متجر متخصص في منتجات الأطفال التعليمية<br/>
+    📞 للتواصل: <strong>0660242782</strong> | ⏰ من 9 صباحاً حتى 9 مساءً<br/>
+    <br/>جميع الحقوق محفوظة © 2026 — التوصيل لجميع مدن المغرب 🇲🇦
+  </footer>
+<!-- زر ثابت في الأسفل -->
+<div class="fixed-order-bar">
+    <button onclick="scrollToForm()">🛒 اطلب الآن</button>
+  </div>
+  <!-- ===== مودال النجاح ===== -->
+  <div class="modal-overlay" id="success-modal">
+    <div class="modal-box">
+      <div class="modal-icon">🎉</div>
+      <div class="modal-title">تم تأكيد طلبك!</div>
+      <p class="modal-text">
+        شكراً لك! طلبك في طريقه إليك.<br/>
+        سيتصل بك أحد مندوبينا قريباً لتأكيد التفاصيل.<br/>
+        <strong>التوصيل: 2-4 أيام</strong>
+      </p>
+      <button class="modal-close" onclick="closeModal()">حسناً 👍</button>
+    </div>
+  </div>
+
+  <!-- ===== JavaScript ===== -->
+  <script>
+    /* ========== معرض الصور ========== */
+    const images = [
+      'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1560343776-97e7d202ff0e?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop'
+    ];
+
+    function switchImage(index, thumbEl) {
+      const mainImg = document.getElementById('main-img');
+      const thumbs  = document.querySelectorAll('.thumb');
+
+      // Fade out
+      mainImg.classList.add('fade-out');
+
+      setTimeout(() => {
+        mainImg.src = images[index];
+        mainImg.classList.remove('fade-out');
+      }, 300);
+
+      // تحديث الحالة النشطة
+      thumbs.forEach(t => t.classList.remove('active'));
+      thumbEl.classList.add('active');
+    }
+
+    /* ========== العداد التنازلي ========== */
+    (function startTimer() {
+      // نبدأ من 5 ساعات و47 دقيقة
+      let totalSeconds = (5 * 3600) + (47 * 60);
+
+      function update() {
+        const h = Math.floor(totalSeconds / 3600);
+        const m = Math.floor((totalSeconds % 3600) / 60);
+        const s = totalSeconds % 60;
+
+        document.getElementById('t-hours').textContent = String(h).padStart(2, '0');
+        document.getElementById('t-mins').textContent  = String(m).padStart(2, '0');
+        document.getElementById('t-secs').textContent  = String(s).padStart(2, '0');
+
+        if (totalSeconds > 0) totalSeconds--;
+        else {
+          // إعادة تشغيل العداد (استراتيجية Evergreen Countdown)
+          totalSeconds = (5 * 3600) + (47 * 60);
+        }
+      }
+
+      update();
+      setInterval(update, 1000);
+    })();
+
+    /* ========== الأسئلة الشائعة ========== */
+    function toggleFaq(item) {
+      const isOpen = item.classList.contains('open');
+      // إغلاق الكل
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      // فتح المحدد إذا لم يكن مفتوحاً
+      if (!isOpen) item.classList.add('open');
+    }
+
+    /* ========== التحقق وإرسال الطلب ========== */
+    function submitOrder() {
+      const name    = document.getElementById('f-name').value.trim();
+      const phone   = document.getElementById('f-phone').value.trim();
+      const city    = document.getElementById('f-city').value;
+      const address = document.getElementById('f-address').value.trim();
+      const variant = document.querySelector('input[name="variant"]:checked').value;
+
+      // تحقق بسيط
+      if (!name) {
+        shakeField('f-name', 'الرجاء إدخال اسمك الكامل'); return;
+      }
+      if (!phone || !/^(06|07)\d{8}$/.test(phone.replace(/\s/g,''))) {
+        shakeField('f-phone', 'رقم الهاتف غير صحيح (يجب أن يبدأ بـ 06 أو 07)'); return;
+      }
+      if (!city) {
+        shakeField('f-city', 'الرجاء اختيار مدينتك'); return;
+      }
+      if (!address) {
+        shakeField('f-address', 'الرجاء إدخال عنوانك'); return;
+      }
+
+      // تعطيل الزر مؤقتاً
+      const btn = document.getElementById('btn-order');
+      btn.disabled = true;
+      btn.textContent = '⏳ جارٍ تأكيد الطلب...';
+
+      // محاكاة إرسال الطلب (اربط هنا بـ API الخاص بك)
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.textContent = '✅ أكد طلبك الآن — توصيل مجاني';
+        // عرض مودال النجاح
+        document.getElementById('success-modal').classList.add('show');
+        // مسح الفورمة
+        document.getElementById('f-name').value    = '';
+        document.getElementById('f-phone').value   = '';
+        document.getElementById('f-city').value    = '';
+        document.getElementById('f-address').value = '';
+      }, 1500);
+    }
+
+    /* ===== هز الحقل عند الخطأ ===== */
+    function shakeField(id, message) {
+      const el = document.getElementById(id);
+      el.style.borderColor = '#E63946';
+      el.style.animation   = 'shake 0.4s ease';
+      el.focus();
+
+      // إضافة رسالة خطأ مؤقتة
+      let msg = el.parentElement.querySelector('.err-msg');
+      if (!msg) {
+        msg = document.createElement('span');
+        msg.className = 'err-msg';
+        msg.style.cssText = 'color:#E63946;font-size:12px;font-weight:700;display:block;margin-top:4px;';
+        el.parentElement.appendChild(msg);
+      }
+      msg.textContent = '⚠️ ' + message;
+
+      setTimeout(() => {
+        el.style.animation   = '';
+        el.style.borderColor = '';
+        if (msg) msg.remove();
+      }, 3000);
+    }
+
+    /* ===== إغلاق المودال ===== */
+    function closeModal() {
+      document.getElementById('success-modal').classList.remove('show');
+    }
+    // إغلاق بالنقر خارج الصندوق
+    document.getElementById('success-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    /* ===== CSS للهز (Shake Animation) ===== */
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes shake {
+        0%,100% { transform: translateX(0); }
+        20%      { transform: translateX(-8px); }
+        40%      { transform: translateX(8px); }
+        60%      { transform: translateX(-5px); }
+        80%      { transform: translateX(5px); }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+<script>
+    function scrollToForm() {
+      document.querySelector('.delivery-bar').scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
+    </script>
+</body>
+</html>

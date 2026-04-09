@@ -1,24 +1,29 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-// لخدمة الملفات الثابتة مثل الـ CSS والصور إذا كانت موجودة في مجلد اسمه public
-app.use(express.static('public'));
+// Middleware
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-// المسار الرئيسي (Main Route)
+// Routes
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// مسار صفحة التلوين (Coloring Route)
 app.get('/coloring', (req, res) => {
-    res.sendFile(path.join(__dirname, 'coloring.html'));
+    res.sendFile(path.join(__dirname, 'public', 'coloring.html'));
 });
 
-// التعامل مع الروابط غير الموجودة (404)
+app.get('/thanks', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'thanks.html'));
+});
+
+// 404 Handler (اختياري)
 app.use((req, res) => {
-    res.status(404).send('الصفحة غير موجودة');
+    res.status(404).send('<h1>الصفحة غير موجودة 404</h1>');
 });
 
 app.listen(PORT, () => {
