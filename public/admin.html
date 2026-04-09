@@ -14,10 +14,7 @@
       padding: 15px;
       min-height: 100vh;
     }
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+    .container { max-width: 1200px; margin: 0 auto; }
     h1 {
       text-align: center;
       color: #2d6a4f;
@@ -32,60 +29,50 @@
       gap: 15px;
       margin-bottom: 20px;
     }
-    .total {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #2d6a4f;
-    }
-    .refresh-btn {
-      padding: 12px 20px;
-      background: #c9a84c;
-      color: #1a1208;
+    .total { font-size: 1.1rem; font-weight: 700; color: #2d6a4f; }
+
+    .refresh-btn, .status-btn {
+      padding: 12px 18px;
       border: none;
       border-radius: 8px;
       font-weight: 700;
       cursor: pointer;
       font-size: 1rem;
     }
+    .refresh-btn { background: #c9a84c; color: #1a1208; }
 
-    /* جدول ريسبونسيف */
-    .table-container {
-      overflow-x: auto;
-      border-radius: 12px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-      background: white;
+    .table-container { overflow-x: auto; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); background: white; }
+    table { width: 100%; min-width: 800px; border-collapse: collapse; }
+    th, td { padding: 14px 10px; text-align: right; border-bottom: 1px solid #e0d4c0; }
+    th { background: #c9a84c; color: #1a1208; position: sticky; top: 0; z-index: 10; }
+
+    tr:hover { background: #fdf8ee; }
+
+    /* أزرار الحالة */
+    .status-btn {
+      font-size: 0.9rem;
+      padding: 8px 14px;
+      margin: 0 4px;
     }
-    table {
-      width: 100%;
-      min-width: 700px; /* لضمان عدم الضغط كثيراً على الموبايل */
-      border-collapse: collapse;
+    .btn-processing {
+      background: #f39c12;
+      color: white;
     }
-    th, td {
-      padding: 14px 12px;
-      text-align: right;
-      border-bottom: 1px solid #e0d4c0;
+    .btn-delivered {
+      background: #27ae60;
+      color: white;
     }
-    th {
-      background: #c9a84c;
-      color: #1a1208;
+
+    .status-badge {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
       font-weight: 700;
-      position: sticky;
-      top: 0;
-      z-index: 10;
     }
-    tr:hover {
-      background: #fdf8ee;
-    }
+    .status-processing { background: #f39c12; color: white; }
+    .status-delivered { background: #27ae60; color: white; }
 
-    /* تصميم خاص للموبايل */
-    @media (max-width: 768px) {
-      h1 { font-size: 1.6rem; }
-      th, td { padding: 12px 8px; font-size: 0.95rem; }
-      .header { flex-direction: column; align-items: stretch; }
-      .total { text-align: center; }
-    }
-
-    /* بطاقات على الموبايل (أفضل تجربة) */
+    /* بطاقات الموبايل */
     .card {
       display: none;
       background: white;
@@ -94,20 +81,13 @@
       border-radius: 12px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     }
+    .card-item { margin-bottom: 10px; }
+    .card-item strong { display: inline-block; width: 100px; color: #5a4b36; }
 
     @media (max-width: 768px) {
       table { display: none; }
       .card { display: block; }
-    }
-
-    .card-item {
-      margin-bottom: 12px;
-      font-size: 0.95rem;
-    }
-    .card-item strong {
-      color: #5a4b36;
-      display: inline-block;
-      width: 110px;
+      h1 { font-size: 1.6rem; }
     }
   </style>
 </head>
@@ -120,9 +100,9 @@
       <button class="refresh-btn" onclick="loadOrders()">تحديث البيانات 🔄</button>
     </div>
 
-    <!-- جدول للكمبيوتر والتابلت -->
+    <!-- الجدول -->
     <div class="table-container">
-      <table id="orders-table">
+      <table>
         <thead>
           <tr>
             <th>التاريخ</th>
@@ -131,13 +111,15 @@
             <th>العنوان</th>
             <th>العرض</th>
             <th>الكتاب</th>
+            <th>الحالة</th>
+            <th>إجراء</th>
           </tr>
         </thead>
         <tbody id="orders-body"></tbody>
       </table>
     </div>
 
-    <!-- بطاقات للهواتف -->
+    <!-- بطاقات للموبايل -->
     <div id="cards-container"></div>
 
     <div id="no-data" style="text-align:center; padding:60px 20px; color:#777; display:none;">
@@ -170,14 +152,19 @@
 
         orders.forEach(order => {
           const date = new Date(order.date).toLocaleString('ar-MA', {
-            year: 'numeric', month: 'short', day: 'numeric',
-            hour: '2-digit', minute: '2-digit'
+            year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
           });
 
-          // إخفاء جزئي للهاتف
-          const hiddenPhone = order.phone.replace(/(\d{2})\d{4}(\d{2})/, '$1****$2');
+          const hiddenPhone = order.phone;
 
-          // الصف للجدول
+          const currentStatus = order.status || 'new';
+          const statusText = currentStatus === 'delivered' ? 'تم التوصيل' : 
+                            currentStatus === 'processing' ? 'قيد الشحن' : 'جديد';
+
+          const statusClass = currentStatus === 'delivered' ? 'status-delivered' : 
+                             currentStatus === 'processing' ? 'status-processing' : '';
+
+          // الصف في الجدول
           const row = `
             <tr>
               <td>${date}</td>
@@ -186,6 +173,11 @@
               <td>${order.address}</td>
               <td>${order.offer}</td>
               <td>${order.selectedBook || '—'}</td>
+              <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+              <td>
+                <button class="status-btn btn-processing" onclick="updateStatus('${order._id}', 'processing')">قيد الشحن</button>
+                <button class="status-btn btn-delivered" onclick="updateStatus('${order._id}', 'delivered')">تم التوصيل</button>
+              </td>
             </tr>
           `;
           tbody.innerHTML += row;
@@ -199,6 +191,11 @@
               <div class="card-item"><strong>العنوان:</strong> ${order.address}</div>
               <div class="card-item"><strong>العرض:</strong> ${order.offer}</div>
               <div class="card-item"><strong>الكتاب:</strong> ${order.selectedBook || '—'}</div>
+              <div class="card-item"><strong>الحالة:</strong> <span class="status-badge ${statusClass}">${statusText}</span></div>
+              <div style="margin-top:12px;">
+                <button class="status-btn btn-processing" onclick="updateStatus('${order._id}', 'processing')">قيد الشحن</button>
+                <button class="status-btn btn-delivered" onclick="updateStatus('${order._id}', 'delivered')">تم التوصيل</button>
+              </div>
             </div>
           `;
           cardsContainer.innerHTML += card;
@@ -210,7 +207,30 @@
       }
     }
 
-    // تحميل البيانات تلقائيًا عند فتح الصفحة
+    async function updateStatus(orderId, status) {
+      if (!confirm(`هل أنت متأكد من تغيير الحالة إلى "${status === 'delivered' ? 'تم التوصيل' : 'قيد الشحن'}"؟`)) {
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/orders/${orderId}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status })
+        });
+
+        if (res.ok) {
+          alert('تم تحديث الحالة بنجاح');
+          loadOrders(); // إعادة تحميل الطلبات
+        } else {
+          alert('فشل في تحديث الحالة');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('حدث خطأ في الاتصال');
+      }
+    }
+
     window.onload = loadOrders;
   </script>
 </body>
