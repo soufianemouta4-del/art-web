@@ -29,19 +29,27 @@ let isConnected = false;
 
 const connectDB = async () => {
   if (isConnected) return;
+
+  if (!process.env.MONGO_URI) {
+    throw new Error('MONGO_URI غير موجود في الـ Environment Variables');
+  }
+
   try {
     await mongoose.connect(process.env.MONGO_URI, {
       serverSelectionTimeoutMS: 45000,
-      socketTimeoutMS: 60000,
+      socketTimeoutMS: 45000,
+      connectTimeoutMS: 30000,
+      maxPoolSize: 10,        // مهم في Vercel
+      minPoolSize: 1,
     });
+
     isConnected = true;
-    console.log('✅ Connected to MongoDB Atlas Successfully');
+    console.log('✅ Connected to MongoDB Atlas');
   } catch (err) {
     console.error('❌ MongoDB Connection Error:', err.message);
     throw err;
   }
 };
-
 // Routes
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 app.get('/thanks', (req, res) => res.sendFile(path.join(__dirname, 'public', 'thanks.html')));
@@ -67,10 +75,9 @@ app.post('/submit-order', async (req, res) => {
     res.redirect('/thanks');
   } catch (error) {
     console.error('Error saving order:', error.message);
-    res.status(500).send('حدث خطأ أثناء حفظ الطلب');
+    res.status(500).send('حدث خطأ أثناء حفظ الطلب. حاول مرة أخرى.');
   }
 });
-
 app.patch('/api/orders/:id/status', async (req, res) => {
   try {
     await connectDB();
