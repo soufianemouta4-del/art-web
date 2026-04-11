@@ -1,12 +1,13 @@
+require('dotenv').config({ path: './.env' });
+
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
-// في أعلى الملف مباشرة (قبل أي شيء آخر)
-require('dotenv').config({ path: './.env' });
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middleware
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -25,6 +26,7 @@ const orderSchema = new mongoose.Schema({
 });
 
 const Order = mongoose.model('Order', orderSchema);
+
 let cachedConnection = null;
 
 const connectDB = async () => {
@@ -34,18 +36,17 @@ const connectDB = async () => {
   }
 
   if (!process.env.MONGO_URI) {
-    throw new Error('MONGO_URI غير موجود في Environment Variables');
+    throw new Error('MONGO_URI غير موجود');
   }
 
   try {
     console.log('🔄 Attempting to connect to MongoDB...');
     
     const conn = await mongoose.connect(process.env.MONGO_URI, {
-      serverSelectionTimeoutMS: 60000,   // زد إلى 60 ثانية
+      serverSelectionTimeoutMS: 60000,
       socketTimeoutMS: 60000,
       connectTimeoutMS: 30000,
-      maxPoolSize: 5,                    // أقل في Vercel Serverless
-      minPoolSize: 1,
+      maxPoolSize: 5,
       retryWrites: true,
     });
 
@@ -54,12 +55,10 @@ const connectDB = async () => {
     return conn;
   } catch (err) {
     console.error('❌ MongoDB Connection Error:', err.message);
-    if (err.name === 'MongoServerSelectionError') {
-      console.error('→ تحقق من: IP Whitelist + استخدام mongodb+srv://');
-    }
     throw err;
   }
 };
+
 // Routes
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 app.get('/thanks', (req, res) => res.sendFile(path.join(__dirname, 'public', 'thanks.html')));
@@ -81,11 +80,11 @@ app.post('/submit-order', async (req, res) => {
     await connectDB();
     const newOrder = new Order(req.body);
     await newOrder.save();
-    console.log('📦 New order saved');
+    console.log('📦 New order saved:', req.body.name);
     res.redirect('/thanks');
   } catch (error) {
     console.error('Error saving order:', error.message);
-    res.status(500).send('حدث خطأ أثناء حفظ الطلب. حاول مرة أخرى.');
+    res.status(500).send('حدث خطأ أثناء حفظ الطلب. حاول مرة أخرى لاحقًا.');
   }
 });
 
@@ -97,19 +96,24 @@ app.patch('/api/orders/:id/status', async (req, res) => {
     const updated = await Order.findByIdAndUpdate(id, { status }, { new: true });
     res.json({ success: true, order: updated });
   } catch (error) {
+    console.error('Error updating status:', error.message);
     res.status(500).json({ error: 'حدث خطأ' });
   }
 });
 
-app.use((req, res) => res.status(404).send('<h1>404</h1>'));
+app.use((req, res) => res.status(404).send('<h1>404 - الصفحة غير موجودة</h1>'));
 
-const start = async () => {
-  try {
-    await connectDB();
-    app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
-  } catch (e) {
-    console.error("Failed to start:", e.message);
-  }
-};
+// لـ Vercel Serverless
+if (process.env.NODE_ENV !== 'production') {
+  const start = async () => {
+    try {
+      await connectDB();
+      app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+    } catch (e) {
+      console.error("Failed to start:", e.message);
+    }
+  };
+  start();
+}
 
-start();
+module.exports = app;   // ← هذا مهم جدًا لـ Vercel
