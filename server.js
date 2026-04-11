@@ -1,7 +1,8 @@
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
-require('dotenv').config();
+// في أعلى الملف مباشرة (قبل أي شيء آخر)
+require('dotenv').config({ path: './.env' });
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -10,7 +11,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-console.log("MONGO_URI:", process.env.MONGO_URI ? "موجود" : "غير موجود");
+console.log("MONGO_URI:", process.env.MONGO_URI ? "موجود ✅" : "غير موجود ❌");
 
 // Schema
 const orderSchema = new mongoose.Schema({
@@ -24,29 +25,38 @@ const orderSchema = new mongoose.Schema({
 });
 
 const Order = mongoose.model('Order', orderSchema);
-
-let isConnected = false;
+let cachedConnection = null;
 
 const connectDB = async () => {
-  if (isConnected) return;
+  if (cachedConnection) {
+    console.log('✅ Using cached MongoDB connection');
+    return cachedConnection;
+  }
 
   if (!process.env.MONGO_URI) {
-    throw new Error('MONGO_URI غير موجود في الـ Environment Variables');
+    throw new Error('MONGO_URI غير موجود في Environment Variables');
   }
 
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
-      serverSelectionTimeoutMS: 45000,
-      socketTimeoutMS: 45000,
+    console.log('🔄 Attempting to connect to MongoDB...');
+    
+    const conn = await mongoose.connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 60000,   // زد إلى 60 ثانية
+      socketTimeoutMS: 60000,
       connectTimeoutMS: 30000,
-      maxPoolSize: 10,        // مهم في Vercel
+      maxPoolSize: 5,                    // أقل في Vercel Serverless
       minPoolSize: 1,
+      retryWrites: true,
     });
 
-    isConnected = true;
-    console.log('✅ Connected to MongoDB Atlas');
+    cachedConnection = conn;
+    console.log('✅ Connected to MongoDB Atlas Successfully');
+    return conn;
   } catch (err) {
     console.error('❌ MongoDB Connection Error:', err.message);
+    if (err.name === 'MongoServerSelectionError') {
+      console.error('→ تحقق من: IP Whitelist + استخدام mongodb+srv://');
+    }
     throw err;
   }
 };
@@ -78,6 +88,7 @@ app.post('/submit-order', async (req, res) => {
     res.status(500).send('حدث خطأ أثناء حفظ الطلب. حاول مرة أخرى.');
   }
 });
+
 app.patch('/api/orders/:id/status', async (req, res) => {
   try {
     await connectDB();
