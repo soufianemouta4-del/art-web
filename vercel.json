@@ -1,17 +1,21 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "server.js",
-        "use": "@vercel/node"
-      }
-    ],
-    "routes": [
-      { "src": "/submit-order", "dest": "server.js" },
-      { "src": "/api/orders", "dest": "server.js" },
-      { "src": "/api/orders/(.*)", "dest": "server.js" },
-      { "src": "/thanks.html", "dest": "server.js" },
-      { "src": "/admin.html", "dest": "server.js" },
-      { "src": "/(.*)", "dest": "/public/$1" }
-    ]
-  }
+  "version": 2,
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    { "src": "/submit-order", "dest": "/api/index.js" },
+    { "src": "/api/orders", "dest": "/api/index.js" },
+    { "src": "/api/orders/(.*)", "dest": "/api/index.js" },
+    { "src": "/thanks.html", "dest": "/public/thanks.html" },
+    { "src": "/admin.html", "dest": "/public/admin.html" },
+    { "src": "/(.*)", "dest": "/public/$1" }
+  ]
+}

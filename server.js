@@ -12,15 +12,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// خدمة الملفات الثابتة من مجلد public
-app.use(express.static(path.join(__dirname, 'public')));
+// خدمة الملفات الثابتة (public folder)
+app.use(express.static(path.join(__dirname, '../public')));
 
-// الاتصال بـ MongoDB
+// MongoDB
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ MongoDB Connected'))
+  .then(() => console.log('✅ MongoDB Connected on Vercel'))
   .catch(err => console.error('❌ MongoDB Error:', err));
 
-// Schema + Model (نفس السابق)
+// Order Schema
 const orderSchema = new mongoose.Schema({
   name: String,
   address: String,
@@ -38,12 +38,9 @@ app.post('/submit-order', async (req, res) => {
   try {
     const newOrder = new Order(req.body);
     await newOrder.save();
-    console.log('طلب جديد:', newOrder._id);
-
-    // على Vercel → أفضل استخدام JSON + انتقال من الـ frontend
     res.json({ success: true });
   } catch (err) {
-    res.status(500).json({ success: false });
+    res.status(500).json({ success: false, message: 'خطأ في حفظ الطلب' });
   }
 });
 
@@ -58,11 +55,5 @@ app.patch('/api/orders/:id/status', async (req, res) => {
   res.json({ success: true });
 });
 
-// للصفحات
-app.get('/thanks.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'thanks.html')));
-app.get('/admin.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'admin.html')));
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server ready on port ${PORT}`));
-
-module.exports = app;   // ← مهم جداً لـ Vercel
+// Export for Vercel
+module.exports = app;

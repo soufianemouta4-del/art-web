@@ -655,7 +655,7 @@
     : `${selectedBook || 'كتاب واحد'} (99 د.م)`;
 
   // ←←← التعديل المهم هنا
-  fetch('http://localhost:3000/submit-order', {
+  fetch('https://art-web-e8su.vercel.app/submit-order', {
     method: 'POST',
     headers: { 
       'Content-Type': 'application/json' 
