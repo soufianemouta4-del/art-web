@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "��#\u0000 \u0000a\u0000r\u0000t\u0000-\u0000w\u0000e\u0000b\u0000\r\u0000 \u0000#\u0000 \u0000a\u0000r\u0000t\u0000-\u0000w\u0000e\u0000b\u0000\r\u0000 \u0000",
   "main": "server.js",
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
@@ -20,15 +17,5 @@
   "bugs": {
     "url": "https://github.com/soufianemouta4-del/art-web/issues"
   },
-  "homepage": "https://github.com/soufianemouta4-del/art-web#readme",
-  "dependencies": {
-    "cors": "^2.8.6",
-    "express": "^5.2.1",
-    "mongoose": "^9.4.1",
-    "nodemon": "^3.1.14"
-  },
-  "devDependencies": {
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.6"
-  }
+  "homepage": "https://github.com/soufianemouta4-del/art-web#readme"
 }
