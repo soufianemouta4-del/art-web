@@ -12,15 +12,26 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// خدمة الملفات الثابتة من مجلد public
-app.use(express.static(path.join(__dirname, 'public')));
+// خدمة الملفات الثابتة
+app.use(express.static(path.join(__dirname, '../public')));
 
-// الاتصال بـ MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ MongoDB Connected'))
-  .catch(err => console.error('❌ MongoDB Error:', err));
+// MongoDB Connection مع معالجة خطأ أفضل
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    });
+    console.log('✅ MongoDB Connected successfully');
+  } catch (err) {
+    console.error('❌ MongoDB Connection Error:', err.message);
+    throw err; // سيظهر الخطأ بوضوح في Vercel Logs
+  }
+};
 
-// Schema + Model (نفس السابق)
+connectDB();
+
+// Schema
 const orderSchema = new mongoose.Schema({
   name: String,
   address: String,
@@ -33,36 +44,37 @@ const orderSchema = new mongoose.Schema({
 
 const Order = mongoose.model('Order', orderSchema);
 
-// Routes
+// Routes مع try/catch
 app.post('/submit-order', async (req, res) => {
   try {
     const newOrder = new Order(req.body);
     await newOrder.save();
-    console.log('طلب جديد:', newOrder._id);
-
-    // على Vercel → أفضل استخدام JSON + انتقال من الـ frontend
     res.json({ success: true });
   } catch (err) {
-    res.status(500).json({ success: false });
+    console.error('Submit Order Error:', err);
+    res.status(500).json({ success: false, message: err.message });
   }
 });
 
 app.get('/api/orders', async (req, res) => {
-  const orders = await Order.find().sort({ createdAt: -1 });
-  res.json(orders);
+  try {
+    const orders = await Order.find().sort({ createdAt: -1 });
+    res.json(orders);
+  } catch (err) {
+    console.error('Get Orders Error:', err);
+    res.status(500).json({ message: err.message });
+  }
 });
 
 app.patch('/api/orders/:id/status', async (req, res) => {
-  const { status } = req.body;
-  await Order.findByIdAndUpdate(req.params.id, { status });
-  res.json({ success: true });
+  try {
+    const { status } = req.body;
+    await Order.findByIdAndUpdate(req.params.id, { status });
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Update Status Error:', err);
+    res.status(500).json({ success: false });
+  }
 });
 
-// للصفحات
-app.get('/thanks.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'thanks.html')));
-app.get('/admin.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'admin.html')));
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server ready on port ${PORT}`));
-
-module.exports = app;   // ← مهم جداً لـ Vercel
+module.exports = app;
