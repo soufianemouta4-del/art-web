@@ -621,7 +621,6 @@
         if (!selectedBook) selectOffer('bundle');
       }
     }
-
     function submitOrder() {
   const name = document.getElementById('fullname').value.trim();
   const addr = document.getElementById('address').value.trim();
@@ -655,10 +654,12 @@
     ? 'باقة الكتابين + هدية مجانية (149 د.م)' 
     : `${selectedBook || 'كتاب واحد'} (99 د.م)`;
 
-  // إرسال البيانات إلى السيرفر
-  fetch('/submit-order', {
+  // ←←← التعديل المهم هنا
+  fetch('http://localhost:3000/submit-order', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 
+      'Content-Type': 'application/json' 
+    },
     body: JSON.stringify({
       name: name,
       address: addr,
@@ -668,15 +669,28 @@
     })
   })
   .then(response => {
-    if (response.redirected) {
-      window.location.href = response.url;   // الانتقال إلى thanks.html
+    if (response.ok) {
+      if (response.redirected) {
+        window.location.href = response.url;
+      } else {
+        // في حال استخدمنا JSON في المستقبل
+        return response.json();
+      }
+    } else {
+      throw new Error('فشل في إرسال الطلب');
     }
+  })
+  .then(data => {
+    console.log('Success:', data);
+    window.location.href = '/thanks.html';     // أو '/thank-you.html' حسب اسم الملف
   })
   .catch(err => {
     console.error('Error:', err);
-    alert('حدث خطأ في الاتصال. حاول مرة أخرى.');
+    alert('حدث خطأ في الاتصال بالسيرفر. تأكد أن السيرفر يعمل على port 3000');
   });
-}  </script>
+}
+
+</script>
 <script type="text/javascript">
   (function(c,l,a,r,i,t,y){
       c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
