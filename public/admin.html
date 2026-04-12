@@ -128,17 +128,6 @@
   </div>
 
   <script>
-/*************  ✨ Codeium Command ⭐  *************/
-/**
- * Load all orders from the server and display them in the table and cards.
- * 
- * If there are no orders, it will display a message "لا توجد طلبات مسجلة حتى الآن"
- * 
- * It will also display the total number of orders at the top of the page.
- * 
- * If an error occurs while fetching the data, it will show an alert with the error message.
- */
-/******  91cdf6da-10fa-4e80-8d4f-cd4ebf254841  *******/
     async function loadOrders() {
       try {
         const res = await fetch('http://localhost:3000/api/orders');        const orders = await res.json();
